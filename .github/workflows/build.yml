@@ -14,7 +14,7 @@ jobs:
         run: brew install xcodegen
 
       - name: Generate Xcode project
-        run: xcodegen generate
+        run: xcodegen generate --project RandomApp --project-format 15.0
 
       - name: Build archive (no signing)
         run: |
