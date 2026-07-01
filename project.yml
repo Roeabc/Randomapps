@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.example
   deploymentTarget:
     iOS: "16.0"
+  projectFormatVersion: "15.0"
 targets:
   RandomApp:
     type: application
