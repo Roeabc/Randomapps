@@ -1,0 +1,40 @@
+name: Build Unsigned IPA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build archive (no signing)
+        run: |
+          xcodebuild archive \
+            -project RandomApp.xcodeproj \
+            -scheme RandomApp \
+            -archivePath RandomApp.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGN_REQUIRED=NO
+
+      - name: Package IPA
+        run: |
+          mkdir Payload
+          cp -R RandomApp.xcarchive/Products/Applications/RandomApp.app Payload/
+          zip -r RandomApp.ipa Payload
+          rm -rf Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RandomApp-unsigned.ipa
+          path: RandomApp.ipa
