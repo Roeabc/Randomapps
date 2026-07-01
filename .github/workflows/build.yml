@@ -14,7 +14,9 @@ jobs:
         run: brew install xcodegen
 
       - name: Generate Xcode project
-        run: xcodegen generate --project RandomApp --project-format 15.0
+  run: |
+    xcodegen generate
+    sed -i '' 's/objectVersion = 77;/objectVersion = 56;/g' RandomApp.xcodeproj/project.pbxproj
 
       - name: Build archive (no signing)
         run: |
